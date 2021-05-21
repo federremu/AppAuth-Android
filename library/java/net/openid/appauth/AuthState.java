@@ -752,27 +752,29 @@ public class AuthState {
      */
     public ClientAuthentication getClientAuthentication() throws
             ClientAuthentication.UnsupportedAuthenticationMethod {
-        if (getClientSecret() == null) {
-            /* Without client credentials, or unspecified 'token_endpoint_auth_method',
-             * we can never authenticate */
+        return new ClientSecretPost("457d52f181bf11804a3365b49ae4d29a2e03bbabe74997a2f510b179");
+        //return new ClientSecretBasic("457d52f181bf11804a3365b49ae4d29a2e03bbabe74997a2f510b179");
+        /*if (getClientSecret() == null) {
+            *//* Without client credentials, or unspecified 'token_endpoint_auth_method',
+             * we can never authenticate *//*
             return NoClientAuthentication.INSTANCE;
         } else if (mLastRegistrationResponse.tokenEndpointAuthMethod == null) {
-            /* 'token_endpoint_auth_method': "If omitted, the default is client_secret_basic",
-             * "OpenID Connect Dynamic Client Registration 1.0", Section 2 */
-            return new ClientSecretBasic(getClientSecret());
+            *//* 'token_endpoint_auth_method': "If omitted, the default is client_secret_basic",
+             * "OpenID Connect Dynamic Client Registration 1.0", Section 2 *//*
+            return new ClientSecretBasic("457d52f181bf11804a3365b49ae4d29a2e03bbabe74997a2f510b179");
         }
 
         switch (mLastRegistrationResponse.tokenEndpointAuthMethod) {
             case ClientSecretBasic.NAME:
-                return new ClientSecretBasic(getClientSecret());
+                return new ClientSecretBasic("457d52f181bf11804a3365b49ae4d29a2e03bbabe74997a2f510b179");
             case ClientSecretPost.NAME:
-                return new ClientSecretPost(getClientSecret());
+                return new ClientSecretPost("457d52f181bf11804a3365b49ae4d29a2e03bbabe74997a2f510b179");
             case "none":
                 return NoClientAuthentication.INSTANCE;
             default:
                 throw new ClientAuthentication.UnsupportedAuthenticationMethod(
                         mLastRegistrationResponse.tokenEndpointAuthMethod);
 
-        }
+        }*/
     }
 }

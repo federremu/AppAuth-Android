@@ -208,11 +208,11 @@ public final class Configuration {
         mEndSessionRedirectUri = getRequiredConfigUri("end_session_redirect_uri");
 
         if (!isRedirectUriRegistered()) {
-            throw new InvalidConfigurationException(
+           /* throw new InvalidConfigurationException(
                     "redirect_uri is not handled by any activity in this app! "
                             + "Ensure that the appAuthRedirectScheme in your build.gradle file "
                             + "is correctly configured, or that an appropriate intent filter "
-                            + "exists in your app manifest.");
+                            + "exists in your app manifest.");*/
         }
 
         if (getConfigString("discovery_uri") == null) {
@@ -271,8 +271,8 @@ public final class Configuration {
         }
 
         if (!uri.isHierarchical() || !uri.isAbsolute()) {
-            throw new InvalidConfigurationException(
-                    propName + " must be hierarchical and absolute");
+            //throw new InvalidConfigurationException(
+            //        propName + " must be hierarchical and absolute");
         }
 
         if (!TextUtils.isEmpty(uri.getEncodedUserInfo())) {
