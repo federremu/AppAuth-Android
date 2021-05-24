@@ -138,7 +138,7 @@ public class TokenActivity extends AppCompatActivity {
         if (response != null && response.authorizationCode != null) {
             // authorization code exchange is required
             mStateManager.updateAfterAuthorization(response, ex);
-            exchangeAuthorizationCode(response);
+            exchangeAuthorizationCode(response); //accesToken e idToken son null authorizationCode no es null
         } else if (ex != null) {
             displayNotAuthorized("Authorization flow failed: " + ex.getMessage());
         } else {
@@ -265,7 +265,7 @@ public class TokenActivity extends AppCompatActivity {
     }
 
     @MainThread
-    private void refreshAccessToken() {
+    private void refreshAccessToken() {//se podria llamar esta ya que esta fallando
         displayLoading("Refreshing access token");
         performTokenRequest(
                 mStateManager.getCurrent().createTokenRefreshRequest(),
@@ -315,6 +315,7 @@ public class TokenActivity extends AppCompatActivity {
 
         mStateManager.updateAfterTokenResponse(tokenResponse, authException);
         if (!mStateManager.getCurrent().isAuthorized()) {
+
             final String message = "Authorization Code exchange failed"
                     + ((authException != null) ? authException.error : "");
 

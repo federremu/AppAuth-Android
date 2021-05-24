@@ -67,7 +67,7 @@ class AuthorizationManagementUtil {
     @SuppressLint("VisibleForTests")
     static AuthorizationManagementResponse responseWith(
             AuthorizationManagementRequest request, Uri uri) {
-        if (request instanceof AuthorizationRequest) {
+        if (request instanceof AuthorizationRequest) {//aca entra con https://openidconnect.net/callback?code=4c27ac85ce364b9591f68b539a32aa7f&state=1KxMLpSTm7c6XlhRkNHkbA
             return new AuthorizationResponse.Builder((AuthorizationRequest) request)
                 .fromUri(uri)
                 .build();

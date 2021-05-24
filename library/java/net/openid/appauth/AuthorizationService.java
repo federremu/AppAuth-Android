@@ -652,10 +652,10 @@ public class AuthorizationService {
                 return;
             }
 
-            if (json.has(AuthorizationException.PARAM_ERROR)) {
+            if (json.has(AuthorizationException.PARAM_ERROR)) {//entra en caso de error (entro)
                 AuthorizationException ex;
                 try {
-                    String error = json.getString(AuthorizationException.PARAM_ERROR);
+                    String error = json.getString(AuthorizationException.PARAM_ERROR);//{"error":"invalid_grant","error_description":"The provided authorization grant or refresh token is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client"}
                     ex = AuthorizationException.fromOAuthTemplate(
                             TokenRequestErrors.byString(error),
                             error,

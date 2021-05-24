@@ -315,9 +315,9 @@ public class AuthorizationManagementActivity extends Activity {
         }
     }
 
-    private Intent extractResponseData(Uri responseUri) {
+    private Intent extractResponseData(Uri responseUri) {//aca ya llega con el code correcto.. https://openidconnect.net/callback?code=b745cf114bd7424094a70c3d0d8419e0&state=DGSShKFmp7VI_uaGGawcTQ
         if (responseUri.getQueryParameterNames().contains(AuthorizationException.PARAM_ERROR)) {
-            return AuthorizationException.fromOAuthRedirect(responseUri).toIntent();
+            return AuthorizationException.fromOAuthRedirect(responseUri).toIntent();//entra aca
         } else {
             AuthorizationManagementResponse response =
                     AuthorizationManagementUtil.responseWith(mAuthRequest, responseUri);
@@ -334,7 +334,7 @@ public class AuthorizationManagementActivity extends Activity {
                 return AuthorizationRequestErrors.STATE_MISMATCH.toIntent();
             }
 
-            return response.toIntent();
+            return response.toIntent();// y sale con Bundle[{net.openid.appauth.AuthorizationResponse={"request":{"configuration":{"authorizationEndpoint":"https:\/\/auth-testing.iduruguay.gub.uy\/oidc\/v1\/authorize","tokenEndpoint":"https:\/\/auth-testing.iduruguay.gub.uy\/oidc\/v1\/token","endSessionEndpoint":"https:\/\/auth-testing.iduruguay.gub.uy\/oidc\/v1\/logout"},"clientId":"890192","responseType":"code","redirectUri":"https:\/\/openidconnect.net\/callback","scope":"openid","state":"1KxMLpSTm7c6XlhRkNHkbA","nonce":"rynNeZubb66l5qGD8HoPpQ","codeVerifier":"oGBj4f_FHy_mjYzbhExvTdWfxWenXUGpdEO7VvCuQq3Ur7WPLDEhtYZgYjh5BFhEbVdpCZArCiQvy-jrK-0ybQ","codeVerifierChallenge":"Eqh4g14SNQuD6UOq7BjByfh_YZ5z4q6spogfiOjk-6Y","codeVerifierChallengeMethod":"S256","additionalParameters":{}},"state":"1KxMLpSTm7c6XlhRkNHkbA","code":"4c27ac85ce364b9591f68b539a32aa7f","additional_parameters":{}}}]
         }
     }
 }
