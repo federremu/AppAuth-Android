@@ -40,6 +40,14 @@ import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.openid.appauth.AppAuthConfiguration;
@@ -57,7 +65,12 @@ import net.openid.appauth.browser.BrowserMatcher;
 import net.openid.appauth.browser.ExactBrowserMatcher;
 import net.openid.appauthdemo.BrowserSelectionAdapter.BrowserInfo;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -122,8 +135,7 @@ public final class LoginActivity extends AppCompatActivity {
                 mExecutor.submit(this::initializeAppAuth));
         findViewById(R.id.start_auth).setOnClickListener((View view) -> startAuth());
 
-        ((EditText)findViewById(R.id.login_hint_value)).addTextChangedListener(
-                new LoginHintChangeHandler());
+
 
         if (!mConfiguration.isValid()) {
             displayError(mConfiguration.getConfigurationError(), false);
@@ -176,17 +188,19 @@ public final class LoginActivity extends AppCompatActivity {
         if (resultCode == RESULT_CANCELED) {
             displayAuthCancelled();
         } else {
-            Intent intent = new Intent(this, TokenActivity.class);
+         Intent intent = new Intent(this, TokenActivity.class);
             intent.putExtras(data.getExtras());
             startActivity(intent);
         }
     }
 
+
+
     @MainThread
     void startAuth() {
         displayLoading("Making authorization request");
 
-        mUsePendingIntents = ((CheckBox) findViewById(R.id.pending_intents_checkbox)).isChecked();
+
 
         // WrongThread inference is incorrect for lambdas
         // noinspection WrongThread
@@ -315,6 +329,7 @@ public final class LoginActivity extends AppCompatActivity {
         Spinner spinner = (Spinner) findViewById(R.id.browser_selector);
         final BrowserSelectionAdapter adapter = new BrowserSelectionAdapter(this);
         spinner.setAdapter(adapter);
+
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -394,7 +409,6 @@ public final class LoginActivity extends AppCompatActivity {
         findViewById(R.id.auth_container).setVisibility(View.GONE);
         findViewById(R.id.error_container).setVisibility(View.GONE);
 
-        ((TextView)findViewById(R.id.loading_description)).setText(loadingMessage);
     }
 
     @MainThread
@@ -403,7 +417,6 @@ public final class LoginActivity extends AppCompatActivity {
         findViewById(R.id.loading_container).setVisibility(View.GONE);
         findViewById(R.id.auth_container).setVisibility(View.GONE);
 
-        ((TextView)findViewById(R.id.error_description)).setText(error);
         findViewById(R.id.retry).setVisibility(recoverable ? View.VISIBLE : View.GONE);
     }
 
@@ -427,26 +440,6 @@ public final class LoginActivity extends AppCompatActivity {
         findViewById(R.id.loading_container).setVisibility(View.GONE);
         findViewById(R.id.error_container).setVisibility(View.GONE);
 
-        AuthState state = mAuthStateManager.getCurrent();
-        AuthorizationServiceConfiguration config = state.getAuthorizationServiceConfiguration();
-
-        String authEndpointStr;
-        if (config.discoveryDoc != null) {
-            authEndpointStr = "Discovered auth endpoint: \n";
-        } else {
-            authEndpointStr = "Static auth endpoint: \n";
-        }
-        authEndpointStr += config.authorizationEndpoint;
-        ((TextView)findViewById(R.id.auth_endpoint)).setText(authEndpointStr);
-
-        String clientIdStr;
-        if (state.getLastRegistrationResponse() != null) {
-            clientIdStr = "Dynamic client ID: \n";
-        } else {
-            clientIdStr = "Static client ID: \n";
-        }
-        clientIdStr += mClientId;
-        ((TextView)findViewById(R.id.client_id)).setText(clientIdStr);
     }
 
     private void displayAuthCancelled() {
@@ -485,10 +478,7 @@ public final class LoginActivity extends AppCompatActivity {
     }
 
     private String getLoginHint() {
-        return ((EditText)findViewById(R.id.login_hint_value))
-                .getText()
-                .toString()
-                .trim();
+        return null;
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -508,7 +498,7 @@ public final class LoginActivity extends AppCompatActivity {
      */
     private final class LoginHintChangeHandler implements TextWatcher {
 
-        private static final int DEBOUNCE_DELAY_MS = 500;
+        private static final int DEBOUNCE_DELAY_MS = 1000;
 
         private Handler mHandler;
         private RecreateAuthRequestTask mTask;

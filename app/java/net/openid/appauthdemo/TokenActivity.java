@@ -138,7 +138,11 @@ public class TokenActivity extends AppCompatActivity {
         if (response != null && response.authorizationCode != null) {
             // authorization code exchange is required
             mStateManager.updateAfterAuthorization(response, ex);
-            exchangeAuthorizationCode(response); //accesToken e idToken son null authorizationCode no es null
+            exchangeAuthorizationCode(response); //esta funcion va a devolver si es valido o no
+            Log.d("code:", response.authorizationCode);
+            //si es valido se llama un intent
+            //si no es válido se vuelve al inicio
+
         } else if (ex != null) {
             displayNotAuthorized("Authorization flow failed: " + ex.getMessage());
         } else {
@@ -273,11 +277,13 @@ public class TokenActivity extends AppCompatActivity {
     }
 
     @MainThread
-    private void exchangeAuthorizationCode(AuthorizationResponse authorizationResponse) {
+    private void exchangeAuthorizationCode(AuthorizationResponse authorizationResponse) {//aca obtiene el token// llamar al backend??
         displayLoading("Exchanging authorization code");
-        performTokenRequest(
+        //llamar a backend y devolver si es válido o no
+
+/*        performTokenRequest(
                 authorizationResponse.createTokenExchangeRequest(),
-                this::handleCodeExchangeResponse);
+                this::handleCodeExchangeResponse);*/
     }
 
     @MainThread
@@ -315,6 +321,7 @@ public class TokenActivity extends AppCompatActivity {
 
         mStateManager.updateAfterTokenResponse(tokenResponse, authException);
         if (!mStateManager.getCurrent().isAuthorized()) {
+            //mandar el post para volver a intentar
 
             final String message = "Authorization Code exchange failed"
                     + ((authException != null) ? authException.error : "");
@@ -328,7 +335,7 @@ public class TokenActivity extends AppCompatActivity {
     }
 
     /**
-     * Demonstrates the use of {@link AuthState#performActionWithFreshTokens} to retrieve
+     * Demonstrates the use of  to retrieve
      * user info from the IDP's user info endpoint. This callback will negotiate a new access
      * token / id token for use in a follow-up action, or provide an error if this fails.
      */

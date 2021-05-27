@@ -1,12 +1,12 @@
 {
   "client_id": "890192",
   "redirect_uri": "https://openidconnect.net/callback",
-  "end_session_redirect_uri": "https://auth-testing.iduruguay.gub.uy/oidc/v1/logout",
-  "authorization_scope": "openid",
+  "end_session_redirect_uri": "https://openidconnect.net/callback",
+  "authorization_scope": "openid personal_info email document profile" ,
   "discovery_uri": "",
   "authorization_endpoint_uri": "https://auth-testing.iduruguay.gub.uy/oidc/v1/authorize",
   "token_endpoint_uri": "https://auth-testing.iduruguay.gub.uy/oidc/v1/token",
-  "registration_endpoint_uri": "auth-testing.iduruguay.gub.uy/oidc/v1/authorize",
+  "registration_endpoint_uri": "https://auth-testing.iduruguay.gub.uy/oidc/v1/authorize",
   "user_info_endpoint_uri": "https://auth-testing.iduruguay.gub.uy/oidc/v1/userinfo",
   "end_session_endpoint": "https://auth-testing.iduruguay.gub.uy/oidc/v1/logout",
   "https_required": false
