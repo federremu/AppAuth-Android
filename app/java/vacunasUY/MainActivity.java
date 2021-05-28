@@ -16,16 +16,17 @@ import com.android.volley.toolbox.Volley;
 import net.openid.appauthdemo.R;
 import net.openid.appauthdemo.TokenActivity;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
+import vacunasUY.entities.User;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main);
 
         Intent intent = getIntent();
         String message = intent.getStringExtra(TokenActivity.EXTRA_MESSAGE);
@@ -41,6 +42,12 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
 
                 Log.d("respuesta", response.toString());
+                try {
+                    User user = new User(response.get("primer_nombre").toString(), response.get("primer_apellido").toString(),
+                        response.get("numero_documento").toString(), response.get("primer_nombre").toString(), "");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
         }, new Response.ErrorListener() {
