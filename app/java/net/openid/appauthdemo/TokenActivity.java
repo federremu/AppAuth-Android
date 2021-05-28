@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,14 @@ import androidx.annotation.MainThread;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.openid.appauth.AppAuthConfiguration;
@@ -42,7 +51,10 @@ import net.openid.appauth.EndSessionRequest;
 import net.openid.appauth.TokenRequest;
 import net.openid.appauth.TokenResponse;
 import okio.Okio;
+import vacunasUY.MainActivity;
+
 import org.joda.time.format.DateTimeFormat;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,9 +63,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 
 /**
@@ -64,6 +79,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * access tokens.
  */
 public class TokenActivity extends AppCompatActivity {
+    public static final String EXTRA_MESSAGE = "";
     private static final String TAG = "TokenActivity";
 
     private static final String KEY_USER_INFO = "userInfo";
@@ -138,8 +154,8 @@ public class TokenActivity extends AppCompatActivity {
         if (response != null && response.authorizationCode != null) {
             // authorization code exchange is required
             mStateManager.updateAfterAuthorization(response, ex);
-            exchangeAuthorizationCode(response); //esta funcion va a devolver si es valido o no
-            Log.d("code:", response.authorizationCode);
+            exchangeAuthorizationCode(response); //esta funcion va a llamar al backend con el code. si vuelve ok va a home. sino vuelve a login
+            //Log.d("code:", response.authorizationCode);
             //si es valido se llama un intent
             //si no es válido se vuelve al inicio
 
@@ -279,7 +295,10 @@ public class TokenActivity extends AppCompatActivity {
     @MainThread
     private void exchangeAuthorizationCode(AuthorizationResponse authorizationResponse) {//aca obtiene el token// llamar al backend??
         displayLoading("Exchanging authorization code");
-        //llamar a backend y devolver si es válido o no
+        Intent intent = new Intent(this, MainActivity.class);
+        String message =  authorizationResponse.authorizationCode;
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
 
 /*        performTokenRequest(
                 authorizationResponse.createTokenExchangeRequest(),
