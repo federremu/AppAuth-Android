@@ -51,6 +51,7 @@ import net.openid.appauth.EndSessionRequest;
 import net.openid.appauth.TokenRequest;
 import net.openid.appauth.TokenResponse;
 import okio.Okio;
+import vacunasUY.GlobalInfo;
 import vacunasUY.MainActivity;
 
 import org.joda.time.format.DateTimeFormat;
@@ -294,15 +295,19 @@ public class TokenActivity extends AppCompatActivity {
 
     @MainThread
     private void exchangeAuthorizationCode(AuthorizationResponse authorizationResponse) {//aca obtiene el token// llamar al backend??
-        displayLoading("Exchanging authorization code");
-        Intent intent = new Intent(this, MainActivity.class);
-        String message =  authorizationResponse.authorizationCode;
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+        if(GlobalInfo.AUTORIZADO){// si es falso el backend fallo
+            displayLoading("Exchanging authorization code");
+            Intent intent = new Intent(this, MainActivity.class);
+            String message =  authorizationResponse.authorizationCode;
+            intent.putExtra(EXTRA_MESSAGE, message);
+            startActivity(intent);
+        }
+        GlobalInfo.AUTORIZADO=true;
 
-/*        performTokenRequest(
+
+        performTokenRequest(
                 authorizationResponse.createTokenExchangeRequest(),
-                this::handleCodeExchangeResponse);*/
+                this::handleCodeExchangeResponse);
     }
 
     @MainThread

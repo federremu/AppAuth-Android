@@ -753,7 +753,7 @@ public class AuthState {
     public ClientAuthentication getClientAuthentication() throws
             ClientAuthentication.UnsupportedAuthenticationMethod {
         //return new ClientSecretPost("457d52f181bf11804a3365b49ae4d29a2e03bbabe74997a2f510b179");
-        return new ClientSecretBasic("457d52f181bf11804a3365b49ae4d29a2e03bbabe74997a2f510b179");
+        return new ClientSecretBasic("");
         /*if (getClientSecret() == null) {
             *//* Without client credentials, or unspecified 'token_endpoint_auth_method',
              * we can never authenticate *//*

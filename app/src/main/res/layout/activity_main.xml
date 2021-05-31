@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="vacunasUY.MainActivity"
-    android:background="@color/colorPrimary" >
+    android:background="@color/colorPrimary"
+    tools:context="vacunasUY.MainActivity">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -15,4 +15,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/vacunasuy" />
+
+    <Button
+        android:id="@+id/misVacunasID"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="MIS VACUNAS"
+        android:onClick="verMisCertificados"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <Button
+        android:id="@+id/vacCercanosID"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="VACUNATORIOS CERCANOS"
+        android:onClick="verVacunatoriosCercanos"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/misVacunasID" />
 </androidx.constraintlayout.widget.ConstraintLayout>
