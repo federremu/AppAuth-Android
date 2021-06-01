@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void verMisCertificados(View view) {
-        //muestra certificados del usuario
+        Intent intent = new Intent(MainActivity.this, CertificadoActivity.class);
+        startActivity(intent);
     }
 }

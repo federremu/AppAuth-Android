@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.openid.appauthdemo">
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:usesCleartextTraffic="true"
         android:name=".Application"
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name_short"
         android:supportsRtl="false"
-        android:theme="@style/AppTheme">
-        <activity android:name="vacunasUY.MainActivity"></activity>
-        <!-- Main activity -->
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name="vacunasUY.CertificadoActivity"></activity>
+        <activity android:name="vacunasUY.MainActivity" /> <!-- Main activity -->
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name_short"
