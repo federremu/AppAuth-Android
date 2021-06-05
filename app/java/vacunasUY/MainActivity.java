@@ -3,6 +3,8 @@ package vacunasUY;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -81,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void verVacunatoriosCercanos(View view) {
         //muestra vacunatorios cercanos
+        Intent intent = new Intent(MainActivity.this, MapaVacunatorios.class);
+        startActivity(intent);
     }
 
     public void verMisCertificados(View view) {
