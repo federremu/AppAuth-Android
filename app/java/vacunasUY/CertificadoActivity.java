@@ -19,11 +19,14 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import net.openid.appauthdemo.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -43,23 +46,39 @@ public class CertificadoActivity extends AppCompatActivity {
 
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="http://10.0.2.2:8080/vacunasUY-web/loginandroid?code";
+        String url ="https://uyvacunas.web.elasticloud.uy/vacunasUY-web/rest/ReservasREST/getActos/47873092";
+        //String url ="https://uyvacunas.web.elasticloud.uy/vacunasUY-web/rest/ReservasREST/getActos/"+MainActivity.user.getCedula();
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,null,  new Response.Listener<JSONObject>() {
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url,null,  new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(JSONArray response) {
                 elementCertificadoList= new ArrayList<>();
                 //llenar la lista de certrificados
-                for(int i=0; i<10; i++){
+/*                for(int i=0; i<10; i++){
                     elementCertificadoList.add(new ListElementCertificado("CoronaVac", "12/10/21", "14/10/22",
                         "1", "covid", "Sinovac"));
+                }*/
+                try {
+                    ;
+                    for(int i= 0; i<response.length(); i++){
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        String fecha = jsonObject.get("fecha").toString();
+                        String periodo = jsonObject.get("periodo").toString();
+                        String vacuna = jsonObject.get("vacuna").toString();
+                        elementCertificadoList.add(new ListElementCertificado(vacuna, fecha, periodo,
+                            "1", "covid", "Sinovac"));
+                    }
+
+                    ListCertificadoAdapter listCertificadoAdapter = new ListCertificadoAdapter(elementCertificadoList, CertificadoActivity.this);
+                    RecyclerView recyclerView = findViewById(R.id.listRecyclerViewCertificados);
+                    recyclerView.setHasFixedSize(true);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(CertificadoActivity.this));
+                    recyclerView.setAdapter(listCertificadoAdapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
-                ListCertificadoAdapter listCertificadoAdapter = new ListCertificadoAdapter(elementCertificadoList, CertificadoActivity.this);
-                RecyclerView recyclerView = findViewById(R.id.listRecyclerViewCertificados);
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new LinearLayoutManager(CertificadoActivity.this));
-                recyclerView.setAdapter(listCertificadoAdapter);
+
 
             }
         }, new Response.ErrorListener() {

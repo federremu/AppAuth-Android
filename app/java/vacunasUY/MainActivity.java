@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button misVacunasButton;
     private Button vacCercanos;
+    public static User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
         misVacunasButton= findViewById(R.id.vacCercanosID);
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="http://10.0.2.2:8080/vacunasUY-web/loginandroid?code="+message;
+        //String url ="http://10.0.2.2:8080/vacunasUY-web/loginandroid?code="+message;
+        String url ="https://uyvacunas.web.elasticloud.uy/vacunasUY-web/loginandroid?code="+message;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,null,  new Response.Listener<JSONObject>() {
             @Override
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d("respuesta", response.toString());
                 try {
-                    User user = new User(response.get("primer_nombre").toString(), response.get("primer_apellido").toString(),
+                    user = new User(response.get("primer_nombre").toString(), response.get("primer_apellido").toString(),
                         response.get("numero_documento").toString(), response.get("primer_nombre").toString(), "");
 
                     setContentView(R.layout.activity_main);
