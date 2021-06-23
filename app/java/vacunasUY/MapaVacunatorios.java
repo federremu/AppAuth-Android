@@ -1,9 +1,11 @@
 package vacunasUY;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -19,6 +21,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import net.openid.appauthdemo.LoginActivity;
 import net.openid.appauthdemo.R;
 
 public class MapaVacunatorios extends FragmentActivity implements OnMapReadyCallback {
@@ -55,6 +58,16 @@ public class MapaVacunatorios extends FragmentActivity implements OnMapReadyCall
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // This callback will only be called when MyFragment is at least Started.
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                Intent intent = new Intent(MapaVacunatorios.this, MainActivity.class);
+                startActivity(intent);
+            }
+        };
+        //requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
         setContentView(R.layout.activity_mapa_vacunatorios);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -134,6 +147,7 @@ public class MapaVacunatorios extends FragmentActivity implements OnMapReadyCall
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(yo, zoomLevel));
 
     }
+
 
 
 

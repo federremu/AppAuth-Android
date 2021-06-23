@@ -6,53 +6,63 @@ public class User {
     private String cedula;
     private String pais;
     private String email;
+    private String token;
 
 
-    public User(String nombre, String apellido, String cedula, String pais, String email) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.cedula = cedula;
-        this.pais = pais;
-        this.email = email;
+    public User(String token) {
+        this.token = token;
     }
 
     public String getNombre() {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
+    public User setNombre(String nombre) {
         this.nombre = nombre;
+        return this;
     }
 
     public String getApellido() {
         return apellido;
     }
 
-    public void setApellido(String apellido) {
+    public User setApellido(String apellido) {
         this.apellido = apellido;
+        return this;
     }
 
     public String getCedula() {
         return cedula;
     }
 
-    public void setCedula(String cedula) {
+    public User setCedula(String cedula) {
         this.cedula = cedula;
+        return this;
     }
 
     public String getPais() {
         return pais;
     }
 
-    public void setPais(String pais) {
+    public User setPais(String pais) {
         this.pais = pais;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public User setEmail(String email) {
         this.email = email;
+        return this;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

@@ -10,18 +10,24 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import net.openid.appauthdemo.LoginActivity;
 import net.openid.appauthdemo.R;
 import net.openid.appauthdemo.TokenActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import vacunasUY.entities.User;
 
@@ -36,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if(user==null){
+            user= new User("");
+        }
         Intent intent = getIntent();
         String message = intent.getStringExtra(EXTRA_MESSAGE);
 
@@ -53,10 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d("respuesta", response.toString());
                 try {
-                    user = new User(response.get("primer_nombre").toString(), response.get("primer_apellido").toString(),
-                        response.get("numero_documento").toString(), response.get("primer_nombre").toString(), "");
-
+                    user.setNombre(response.get("primer_nombre").toString()).setApellido(response.get("primer_apellido").toString()).setCedula(response.get("numero_documento").toString());
                     setContentView(R.layout.activity_main);
+                    sendToken();
                 } catch (JSONException e) {
                     //volvel al inicio, no es valido
                     Intent intent = new Intent(MainActivity.this, TokenActivity.class);
@@ -91,6 +98,56 @@ public class MainActivity extends AppCompatActivity {
 
     public void verMisCertificados(View view) {
         Intent intent = new Intent(MainActivity.this, CertificadoActivity.class);
+        startActivity(intent);
+    }
+
+
+    private void sendToken() {
+        if (user.getCedula()!=null){
+            String url = "https://uyvacunas.web.elasticloud.uy/vacunasUY-web/rest/UsuarioREST/addToken?cedula="+user.getCedula()+"&token="+user.getToken();
+// Optional Parameters to pass as POST request
+            JSONObject params = new JSONObject();
+/*            try {
+                params.put("cedula", user.getCedula());
+                params.put("token", user.getToken());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }*/
+
+            // Make request for JSONObject
+            JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.POST, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("RESPONSE:", response.toString());
+                    }
+                }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.d("Error: ", error.getMessage());
+                }
+            }) {
+
+                /**
+                 * Passing some request headers
+                 */
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("Content-Type", "application/json; charset=utf-8");
+                    return headers;
+                }
+            };
+
+            // Adding request to request queue
+            Volley.newRequestQueue(this).add(jsonObjReq);
+        }
+    }
+
+    public void logOut(View view) {
+        user= null;
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
     }
 }
