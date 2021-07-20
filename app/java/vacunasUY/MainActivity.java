@@ -3,9 +3,11 @@ package vacunasUY;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +31,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import vacunasUY.entities.Token;
 import vacunasUY.entities.User;
 
 import static net.openid.appauthdemo.TokenActivity.EXTRA_MESSAGE;
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private Button misVacunasButton;
     private Button vacCercanos;
     public static User user;
+    public static Token token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
         misVacunasButton= findViewById(R.id.misVacunasID);
         misVacunasButton= findViewById(R.id.vacCercanosID);
 
+        SharedPreferences myPreferences
+            = PreferenceManager.getDefaultSharedPreferences(this);
+
         RequestQueue queue = Volley.newRequestQueue(this);
         //String url ="http://10.0.2.2:8080/vacunasUY-web/loginandroid?code="+message;
         String url ="https://uyvacunas.web.elasticloud.uy/vacunasUY-web/loginandroid?code="+message;
@@ -63,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     user.setNombre(response.get("primer_nombre").toString()).setApellido(response.get("primer_apellido").toString()).setCedula(response.get("numero_documento").toString());
                     setContentView(R.layout.activity_main);
+                    while (token==null){
+                            Log.d("esperando", "por token");
+                    }
+                    user.setToken(token.getToken());
                     sendToken();
                 } catch (JSONException e) {
                     //volvel al inicio, no es valido
@@ -102,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void sendToken() {
+    public void sendToken() {
         if (user.getCedula()!=null){
             String url = "https://uyvacunas.web.elasticloud.uy/vacunasUY-web/rest/UsuarioREST/addToken?cedula="+user.getCedula()+"&token="+user.getToken();
 // Optional Parameters to pass as POST request
@@ -146,6 +157,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logOut(View view) {
+        user.setToken("");
+        sendToken();
         user= null;
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);

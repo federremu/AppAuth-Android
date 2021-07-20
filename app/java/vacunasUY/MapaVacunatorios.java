@@ -1,6 +1,7 @@
 package vacunasUY;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -30,6 +31,7 @@ public class MapaVacunatorios extends FragmentActivity implements OnMapReadyCall
     //gps
     Double latitude = -32.522779;
     Double longitude = -55.765835;
+    LocationManager mLocationManager;
 
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
@@ -55,6 +57,7 @@ public class MapaVacunatorios extends FragmentActivity implements OnMapReadyCall
 
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +66,7 @@ public class MapaVacunatorios extends FragmentActivity implements OnMapReadyCall
             @Override
             public void handleOnBackPressed() {
                 // Handle the back button event
+                MapaVacunatorios.super.onBackPressed();
                 Intent intent = new Intent(MapaVacunatorios.this, MainActivity.class);
                 startActivity(intent);
             }
@@ -74,7 +78,7 @@ public class MapaVacunatorios extends FragmentActivity implements OnMapReadyCall
             .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         //ActivityCompat.requestPermissions(MapaVacunatorios.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
-        LocationManager mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
@@ -95,20 +99,30 @@ public class MapaVacunatorios extends FragmentActivity implements OnMapReadyCall
                     5, mLocationListener);
         }*/
 
-        if (mLocationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER))
-            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 5, mLocationListener);
-
-        if (mLocationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER))
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 5, mLocationListener);
-
-
-
-
 
     }
 
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (mLocationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER))
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 5, mLocationListener);
 
+
+        if (mLocationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER))
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 5, mLocationListener);
+    }
 
     /**
      * Manipulates the map once available.
